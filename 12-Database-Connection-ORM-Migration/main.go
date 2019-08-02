@@ -101,6 +101,12 @@ func UpdateUserController(c echo.Context) error {
 	user := User{}
 	c.Bind(&newUser)
 
+	if newUser.Name == "" || newUser.Email == "" || newUser.Password == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, map[string]interface{}{
+			"message": "Tidak lengkap guys",
+		})
+	}
+
 	db.First(&user, id)
 	db.Save(&newUser)
 
@@ -109,6 +115,7 @@ func UpdateUserController(c echo.Context) error {
 		"message": "success update user",
 		"user":    newUser,
 	})
+
 }
 
 // delete user controller
